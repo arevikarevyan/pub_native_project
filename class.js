@@ -75,7 +75,7 @@ class Animate {
 			if (!this.keyframes[this.activeKeyframeNum] || this.activeKeyframeNum == 0) {
 				this.reset();
 				if (this.iterationCount != "infinite") {
-					this.stop();
+					this.stop("");
 				}
 				return;
 			}
@@ -115,20 +115,18 @@ class Animate {
 	}
 
 	togglePlay() {
-		if (this.state == "paused") {
-			this.state = "running";
+		if (this.state == "paused" || this.state == "") {
 			this.play();
 		}
-		else if(this.state == "running" || this.state == ""){
-			this.state = "paused";
-			this.stop();
+		else if(this.state == "running"){
+			this.stop("paused");
 		}
 	}
 
-	stop() {
+	stop(val) {
 		clearInterval(this.interval);
 		this.playPauseElem.innerHTML = "Play";
-		this.state = "paused";
+		this.state = val;
 	}
 
 	play() {
@@ -154,13 +152,16 @@ class Animate {
 	}
 
 	restart() {
-		this.stop();
+		this.stop("");
 		this.reset();
 		this.play();
 	}
 
 	toggleDirection() {
 		this.direction *= -1;
+		if (!this.state) {
+			this.reset();
+		}
 	}
 
 	seek(rangeVal) {
